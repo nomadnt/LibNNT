@@ -1,7 +1,7 @@
 NAME=libnnt
 VERSION=0.2.2
 
-PREFIX = /tmp
+PREFIX = 
 
 all:
 
