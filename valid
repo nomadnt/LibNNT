@@ -1,0 +1,76 @@
+#!/usr/bin/awk -f
+# Copyright (C) 2009-2014 nomadnt.com
+
+function number(str){
+	return !match(str, /^[0-9]+$/)
+}
+
+function boolean(str){
+	if(match(str, /^false$/)){ return 0 }
+	if(match(str, /^true$/)){ return 0 }
+	if(match(str, /^0$/)){ return 0 }
+	if(match(str, /^1$/)){ return 0 }
+	return 1
+}
+
+function ip4addr(str){
+	if(match(str, /^[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*$/)){
+		split(str, part, ".")
+		if(part[1] == 0 || part[1] > 255){ return 1 }
+		if(part[2] > 255){return 1 }
+		if(part[3] > 255){ return 1 }
+		if(part[4] > 255){ return 1 }
+		return 0
+	}else{
+		return 1
+	}
+}
+
+function ip6addr(str){
+	gsub("::", ":0000:", str)
+	split(str, part, ":")
+	for(i=0; i<length(part); i++){
+		if(match($i, /^[a-f0-9][a-f0-9]?[a-f0-9]?[a-f0-9]?$/) == 0){ return 1 }
+	}
+	return 0
+}
+
+function macaddr(str){
+	if(split(tolower(str), part, ":") == 6){
+		for(i=0; i<6; i++){
+			if(match(part[i+1], /^[a-f0-9][a-f0-9]$/) == 0){ return 1 }
+		}
+		return 0
+	}else{
+		return 1
+	}
+}
+
+function version(str){
+	return !match(str, /^[0-9]+\.[0-9]+(\.[0-9]+)?$/)
+}
+
+function help(){
+	return sprintf("Usage: valid <validator> <string>\n")
+}
+
+BEGIN {
+	if(ARGC == 2){ ARGV[2]="" }
+	
+	if(match(ARGV[1], /number/)){
+		exit number(ARGV[2])
+	}else if(match(ARGV[1], /boolean/)){
+		exit boolean(ARGV[2])
+	}else if(match(ARGV[1], /ip4addr/)){
+		exit ip4addr(ARGV[2])
+	}else if(match(ARGV[1], /ip6addr/)){
+		exit ip6addr(ARGV[2])
+	}else if(match(ARGV[1], /macaddr/)){
+		exit macaddr(ARGV[2])
+	}else if(match(ARGV[1], /version/)){
+		exit version(ARGV[2])
+	}else if(match(ARGV[1], /help/)){
+		print help()
+		exit 1
+	}
+}
