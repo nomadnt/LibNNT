@@ -1,23 +1,23 @@
 NAME=libnnt
-VERSION=0.2.2
+VERSION=0.2.0
 
-PREFIX = 
+DESTDIR?=/usr/local
 
 all:
 
 install:
-	install -m 0755 -d $(PREFIX)/sbin/
-	install -m 0755 -d $(PREFIX)/lib/nnt
+	install -d -m 0755 $(DESTDIR)/sbin/
+	install -m 0755 valid $(DESTDIR)/sbin/
 
-	install -m 0755 valid $(PREFIX)/sbin/
-	install -m 0644 iputils.sh $(PREFIX)/lib/nnt/
-	install -m 0644 iw.sh $(PREFIX)/lib/nnt/
-	install -m 0644 net.sh $(PREFIX)/lib/nnt/
-	install -m 0644 sys.sh $(PREFIX)/lib/nnt/
-	install -m 0644 uci.sh $(PREFIX)/lib/nnt/
+	install -d -m 0755 $(DESTDIR)/lib/nnt
+	install -m 0644 iputils.sh $(DESTDIR)/lib/nnt/
+	install -m 0644 iw.sh $(DESTDIR)/lib/nnt/
+	install -m 0644 net.sh $(DESTDIR)/lib/nnt/
+	install -m 0644 sys.sh $(DESTDIR)/lib/nnt/
+	install -m 0644 uci.sh $(DESTDIR)/lib/nnt/
 
 uninstall:
-	rm -f  $(PREFIX)/sbin/valid
-	rm -rf $(PREFIX)/lib/nnt
+	rm -f  $(DESTDIR)/sbin/valid
+	rm -rf $(DESTDIR)/lib/nnt
 
-.PHONY: install uninstall all
+.PHONY: all install uninstall
