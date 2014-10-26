@@ -7,7 +7,7 @@ net_get_device(){
 	local network="$1"
 	local device __old_ns
 	[ -n "$network" ] && {
-		json_set_namespace "__nnt_network" namespace
+		json_set_namespace "__nnt_network" __old_ns
 		json_load "$(ubus call network.interface.$network status)"
 		json_get_var device l3_device
 		json_cleanup
